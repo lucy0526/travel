@@ -31,7 +31,7 @@
 				}else{//非法
 					$("#username").css("border", "1px solid red");//设置边框+样式
 				};
-				return true;
+				return flag;
 			}
 			//密码
 			function checkPassword() {
@@ -44,12 +44,12 @@
 				}else{//非法
 					$("#password").css("border", "1px solid red");//设置边框+样式
 				};
-				return true;
+				return flag;
 			}
 
 			//邮箱
 			function checkEmail(){
-				var email = $("#email");
+				var email = $("#email").val();//注意取值
 				/*
 				例如：itcast@163.com
 				//：表示正则表达式
@@ -60,39 +60,32 @@
 				 */
 				var reg_email = /^\w+@\w+\.\w+$/;
 				var flag = reg_email.test(email);
-
+				if(flag){
+					$("#email").css("border", "");
+				}else{//非法
+					$("#email").css("border", "1px solid red");//设置边框+样式
+				};
+				return flag;
 			}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 			$(function () {
 				//当表单提交时，校验
 				$("#registerForm").submit(function () {
-					return checkUsername() && checkPassword();
-
+					if(checkUsername() && checkPassword() && checkEmail()){
+						//ajax提交
+						$.post("registUserServlet", $(this).serialize(), function (data) {
+							//处理服务器响应的数据
+						});
+					}
+					return false;//不会提交，没有返回值或者返回true都会提交
 				});
 
 				//当某组件失去焦点时，校验
 				$("#username").blur(checkUsername);//括号内部方法没有括号
 				$("#password").blur(checkPassword);
-
-
+				$("#email").blur(checkEmail);
 			})
-
-
-
-
 		</script>
 
 
