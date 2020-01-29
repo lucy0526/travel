@@ -74,7 +74,7 @@
 				$("#registerForm").submit(function () {
 					if(checkUsername() && checkPassword() && checkEmail()){
 						//ajax提交
-						$.post("registUserServlet", $(this).serialize(), function (y_data) {
+						$.post("user/regist", $(this).serialize(), function (y_data) {
 							var data = eval("("+y_data+")");// 将json转换为对象 json 格式
 
 							//处理服务器响应的数据
