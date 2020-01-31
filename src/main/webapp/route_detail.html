@@ -84,10 +84,10 @@
             <div class="pros_price">
                 <p class="price"><strong id="price"> </strong><span>起</span></p>
                 <p class="collect">
-                    <a class="btn"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
+                    <a class="btn" id="favorite" onclick="addFavorite()"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
 
-                    <a class="btn already" disabled="disabled"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>
-                    <span>已收藏100次</span>
+                    <!--<a class="btn already" disabled="disabled"><i class="glyphicon glyphicon-heart-empty"></i>点击收藏</a>-->
+                    <span id="favoriteCount"></span>
                 </p>
             </div>
         </div>
@@ -202,15 +202,16 @@
             $("#sname").html(route.seller.sname);
             $("#consphone").html(route.seller.consphone);
             $("#address").html(route.seller.address);
+            $("#favoriteCount").html("已收藏" + route.count + "次");
+
             var ddstr = '<a class="up_img up_img_disable"></a>';
             for (var i = 0; i < route.routeImgList.length; i++) {
                 var astr = "";
-                if (i>=4)
-                {
+                if (i >= 4) {
                     astr = '<a title="" class="little_img" data-bigpic="' + route.routeImgList[i].bigPic + '" style="display:none;">\n' +
                         '                    <img src="' + route.routeImgList[i].smallPic + '">\n' +
                         '                    </a>';
-                }else {
+                } else {
                     astr = '<a title="" class="little_img" data-bigpic="' + route.routeImgList[i].bigPic + '">\n' +
                         '                    <img src="' + route.routeImgList[i].smallPic + '">\n' +
                         '                    </a>';
@@ -222,9 +223,39 @@
             $("#dd").html(ddstr);
             goImg();
         })
+    })
+    //判断是否收藏
+    $(function () {
+        var rid = getParameter("rid");
+        $.get("route/isFavorite", {rid: rid}, function (flag) {
+            if (flag) {
+                //添加样式
+                $("#favorite").addClass("already");
+                $("#favorite").attr("disabled", "disabled");//属性都要用“”, prop设置固有属性
 
+                //已经收藏。删除按钮点击事件
+                $("#favorite").removeAttr("onclick");
+
+            }
+
+        })
     })
 
+    //收藏
+    function addFavorite() {
+        var rid = getParameter("rid");
+        $.get("user/findOne", {}, function (user) {
+            if (user != null) {
+                $.get("route/addFavorite", {rid: rid}, function () {
+                    location.reload();
+                });
+            } else {
+                alert("请先登录！");
+                location.href = "http://localhost/travel/login.html";
+            }
+
+        })
+    }
 </script>
 </body>
 </html>

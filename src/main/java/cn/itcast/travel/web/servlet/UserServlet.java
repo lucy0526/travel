@@ -127,7 +127,7 @@ public class UserServlet extends BaseServlet {
      * @param response
      * @throws IOException
      */
-    public void findone(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void findOne(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Object user = request.getSession().getAttribute("user");
         ObjectMapper mapper = new ObjectMapper();
         response.setContentType("application/json;charset=utf-8");
